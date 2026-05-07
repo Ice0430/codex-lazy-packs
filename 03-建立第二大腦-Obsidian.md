@@ -599,3 +599,14 @@ Program 'codex.exe' failed to run: Access is denied
 - [mcpvault GitHub](https://github.com/bitbonsai/mcpvault)
 - [Obsidian 官網](https://obsidian.md)
 - [Codex MCP 官方文件](https://developers.openai.com/codex/mcp)
+
+---
+
+## 2026-05-07 實測補充：Obsidian MCP 的二段式驗證
+
+這次確認 Obsidian 時，直接啟動 MCPVault 成功不等於 Codex 內的 MCP 工具已載入。建議分兩段驗證：
+
+1. 在 PowerShell 直接測 MCPVault `tools/list`，確認 `read_note`、`write_note`、`search_notes` 等工具存在。
+2. 重啟 Codex Desktop 後，用 Codex 內的 `mcp__obsidian__` 工具實際讀取 vault 筆記。
+
+另外，寫入 Obsidian 筆記時要避免用 PowerShell 雙引號字串包 Markdown 反引號。PowerShell 會把部分反引號序列解讀成控制字元，可能把筆記寫壞。若內容包含 Markdown code span，優先用單引號 here-string 或先讀入文字再做明確 replace，寫完後用 `Get-Content -Tail` 檢查最後段落是否乾淨。
